@@ -5,6 +5,8 @@
 package Vista;
 
 import Controlador.BarcoControl;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -63,7 +65,7 @@ public class BarcoVentana extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Codigo", "Nombre", "Color", "Placa"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -71,10 +73,6 @@ public class BarcoVentana extends javax.swing.JFrame {
         jTextField1.setColumns(5);
 
         jTextField2.setColumns(30);
-
-        jTextField3.setColumns(30);
-
-        jTextField4.setColumns(30);
 
         jTextField5.setColumns(5);
 
@@ -86,11 +84,6 @@ public class BarcoVentana extends javax.swing.JFrame {
         });
 
         jButton2.setText("Listar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -108,9 +101,9 @@ public class BarcoVentana extends javax.swing.JFrame {
                         .addGap(90, 90, 90)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                            .addComponent(jTextField4))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,15 +163,32 @@ public class BarcoVentana extends javax.swing.JFrame {
         args[4]=this.jTextField5.getText();
         
         this.barcoControl.crear(args);
+        this.actualizarTabla();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-         for(var b:this.barcoControl.listar()){
-            System.out.println(b.toString());
+    private void actualizarTabla(){
+        
+        String [] encabezado = new String[5]; 
+        
+        encabezado[0]="Codigo"; 
+        encabezado[1]="Nombre"; 
+        encabezado[2]="Color";
+        encabezado[3]="Placa";
+        
+        var datos = new Object[this.barcoControl.listar().size()][5];
+        var i=0; 
+        for(var barco: this.barcoControl.listar()){
+            datos[i][0]=barco.getCodigo();
+            datos[i][1]=barco.getNombre();
+            datos[i][2]=barco.getColor(); 
+            datos[i][3]=barco.getPlaca(); 
+            datos[i][4]=barco.getCapitan();  
+            i++; 
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
+        
+        this.modeloTabla = new DefaultTableModel(datos, encabezado); 
+        this.jTable1.setModel(modeloTabla);
+    }
     /**
      * @param args the command line arguments
      */
@@ -214,6 +224,7 @@ public class BarcoVentana extends javax.swing.JFrame {
     }
     
     private BarcoControl barcoControl = new BarcoControl();
+    private TableModel modeloTabla; 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
