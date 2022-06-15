@@ -26,5 +26,18 @@ public class CapitanServicio implements ICapitanServicio{
     public List<Capitan> listar() {
         return this.capitanList; 
     }
+
+    @Override
+    public Capitan buscarPorCodigo(int codigoCapitan) {
+        Capitan capitan=null;
+        
+        for(var c:this.capitanList){
+            if(codigoCapitan==c.getCodigo()){
+                capitan=c;
+                break;
+            }
+        }
+        return capitan;
+    }
     
 }
